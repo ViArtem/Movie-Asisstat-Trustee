@@ -1,9 +1,9 @@
-import { Module } from '@nestjs/common';
-import { CalendarApisController } from './calendar-apis.controller';
-import { CalendarApisService } from './calendar-apis.service';
+import { Module } from "@nestjs/common";
+import { CalendarApisController } from "./calendar-apis.controller";
+import { CalendarApisService } from "./calendar-apis.service";
 
 @Module({
   controllers: [CalendarApisController],
-  providers: [CalendarApisService]
+  providers: [CalendarApisService],
 })
 export class CalendarApisModule {}

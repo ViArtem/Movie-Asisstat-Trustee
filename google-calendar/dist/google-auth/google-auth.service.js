@@ -9,17 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserCredentialsDto = void 0;
-const class_validator_1 = require("class-validator");
-class UserCredentialsDto {
-}
-exports.UserCredentialsDto = UserCredentialsDto;
-__decorate([
-    (0, class_validator_1.IsString)({ message: "Value must be a string" }),
-    (0, class_validator_1.Matches)(/^(?!\s*$).+/, {
-        message: "Value credentials must not consist of only spaces",
-    }),
-    (0, class_validator_1.IsDefined)({ message: "Value name must be defined" }),
-    __metadata("design:type", String)
-], UserCredentialsDto.prototype, "credential", void 0);
-//# sourceMappingURL=user-credentials.dto.js.map
+exports.GoogleAuthService = void 0;
+const common_1 = require("@nestjs/common");
+let GoogleAuthService = class GoogleAuthService {
+    constructor() { }
+    googleLogin(userData) {
+        if (!userData.user) {
+            return "No user from google";
+        }
+        console.log(userData);
+        return {
+            message: "User information from google",
+            user: userData.user,
+        };
+    }
+};
+exports.GoogleAuthService = GoogleAuthService;
+exports.GoogleAuthService = GoogleAuthService = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [])
+], GoogleAuthService);
+//# sourceMappingURL=google-auth.service.js.map

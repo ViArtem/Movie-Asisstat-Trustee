@@ -21,8 +21,10 @@ let CalendarApisController = class CalendarApisController {
         this.calendarService = calendarService;
     }
     createTokens(userCredentials) {
-        console.log(userCredentials);
-        return this.calendarService.createTokens(userCredentials.credentials);
+        return this.calendarService.createTokens(userCredentials.credential);
+    }
+    createEvent(userCredentials) {
+        return this.calendarService.createEvents(userCredentials.credential);
     }
 };
 exports.CalendarApisController = CalendarApisController;
@@ -33,6 +35,13 @@ __decorate([
     __metadata("design:paramtypes", [user_credentials_dto_1.UserCredentialsDto]),
     __metadata("design:returntype", void 0)
 ], CalendarApisController.prototype, "createTokens", null);
+__decorate([
+    (0, common_1.Post)("create-post"),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_credentials_dto_1.UserCredentialsDto]),
+    __metadata("design:returntype", void 0)
+], CalendarApisController.prototype, "createEvent", null);
 exports.CalendarApisController = CalendarApisController = __decorate([
     (0, common_1.Controller)("calendar"),
     __metadata("design:paramtypes", [calendar_apis_service_1.CalendarApisService])

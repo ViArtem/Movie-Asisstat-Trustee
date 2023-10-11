@@ -6,17 +6,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CalendarApisModule = void 0;
+exports.GoogleAuthModule = void 0;
 const common_1 = require("@nestjs/common");
-const calendar_apis_controller_1 = require("./calendar-apis.controller");
-const calendar_apis_service_1 = require("./calendar-apis.service");
-let CalendarApisModule = class CalendarApisModule {
+const google_auth_service_1 = require("./google-auth.service");
+const google_auth_controller_1 = require("./google-auth.controller");
+const google_strategy_1 = require("./google.strategy");
+let GoogleAuthModule = class GoogleAuthModule {
 };
-exports.CalendarApisModule = CalendarApisModule;
-exports.CalendarApisModule = CalendarApisModule = __decorate([
+exports.GoogleAuthModule = GoogleAuthModule;
+exports.GoogleAuthModule = GoogleAuthModule = __decorate([
     (0, common_1.Module)({
-        controllers: [calendar_apis_controller_1.CalendarApisController],
-        providers: [calendar_apis_service_1.CalendarApisService],
+        providers: [google_auth_service_1.GoogleAuthService, google_strategy_1.GoogleStrategy],
+        controllers: [google_auth_controller_1.GoogleAuthController],
     })
-], CalendarApisModule);
-//# sourceMappingURL=calendar-apis.module.js.map
+], GoogleAuthModule);
+//# sourceMappingURL=google-auth.module.js.map

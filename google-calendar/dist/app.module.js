@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const movie_apis_module_1 = require("./movie-apis/movie-apis.module");
 const config_1 = require("@nestjs/config");
 const calendar_apis_module_1 = require("./calendar-apis/calendar-apis.module");
+const google_auth_module_1 = require("./google-auth/google-auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_1.ConfigModule.forRoot(), movie_apis_module_1.MovieApisModule, calendar_apis_module_1.CalendarApisModule],
+        imports: [config_1.ConfigModule.forRoot(), movie_apis_module_1.MovieApisModule, calendar_apis_module_1.CalendarApisModule, google_auth_module_1.GoogleAuthModule],
         controllers: [],
         providers: [],
     })

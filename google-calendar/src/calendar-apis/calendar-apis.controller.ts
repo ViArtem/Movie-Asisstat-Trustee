@@ -6,10 +6,8 @@ import { UserCredentialsDto } from "./dto/user-credentials.dto";
 export class CalendarApisController {
   constructor(private readonly calendarService: CalendarApisService) {}
 
-  @Post("create-tokens")
-  createTokens(@Body() userCredentials: UserCredentialsDto) {
-    console.log(userCredentials);
-
-    return this.calendarService.createTokens(userCredentials.credentials);
+  @Post("create-post")
+  createEvent(@Body() userCredentials: UserCredentialsDto) {
+    return this.calendarService.createEvents(userCredentials.credential);
   }
 }

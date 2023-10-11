@@ -6,5 +6,5 @@ export class UserCredentialsDto {
     message: "Value credentials must not consist of only spaces",
   })
   @IsDefined({ message: "Value name must be defined" })
-  readonly credentials: string;
+  readonly credential: string;
 }
