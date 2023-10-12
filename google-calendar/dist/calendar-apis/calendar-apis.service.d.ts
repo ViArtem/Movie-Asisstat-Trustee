@@ -1,8 +1,12 @@
-import { calendar_v3 } from "googleapis";
+import { UsersService } from "src/users/users.service";
 export declare class CalendarApisService {
+    private userService;
     private calendar;
     private readonly auth;
-    constructor();
+    constructor(userService: UsersService);
     createEvents(credential: string): Promise<object>;
-    getFreeSlots(access: string): Promise<import("gaxios").GaxiosResponse<calendar_v3.Schema$Events>>;
+    getEventsTime(access: string): Promise<{
+        start: string;
+        end: string;
+    }[]>;
 }

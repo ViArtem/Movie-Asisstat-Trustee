@@ -8,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
-const users_service_1 = require("./users.service");
-const users_model_1 = require("./users.model");
 const sequelize_1 = require("@nestjs/sequelize");
 const google_auth_module_1 = require("../google-auth/google-auth.module");
+const calendar_apis_module_1 = require("../calendar-apis/calendar-apis.module");
+const users_service_1 = require("./users.service");
+const users_model_1 = require("./users.model");
 let UsersModule = class UsersModule {
 };
 exports.UsersModule = UsersModule;
@@ -20,6 +21,7 @@ exports.UsersModule = UsersModule = __decorate([
         imports: [
             sequelize_1.SequelizeModule.forFeature([users_model_1.User]),
             (0, common_1.forwardRef)(() => google_auth_module_1.GoogleAuthModule),
+            (0, common_1.forwardRef)(() => calendar_apis_module_1.CalendarApisModule),
         ],
         providers: [
             users_service_1.UsersService,

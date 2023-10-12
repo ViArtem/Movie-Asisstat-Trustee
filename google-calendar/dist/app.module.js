@@ -15,6 +15,7 @@ const google_auth_module_1 = require("./google-auth/google-auth.module");
 const sequelize_1 = require("@nestjs/sequelize");
 const users_model_1 = require("./users/users.model");
 const users_module_1 = require("./users/users.module");
+const movie_schedule_module_1 = require("./movie-schedule/movie-schedule.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -38,6 +39,7 @@ exports.AppModule = AppModule = __decorate([
                 autoLoadModels: true,
             }),
             users_module_1.UsersModule,
+            movie_schedule_module_1.MovieScheduleModule,
         ],
         controllers: [],
         providers: [],

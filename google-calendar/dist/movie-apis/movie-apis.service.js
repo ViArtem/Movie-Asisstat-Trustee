@@ -33,10 +33,10 @@ let MovieApisService = class MovieApisService {
                     title: movieData.original_title,
                     release_date: movieData.release_date,
                     displayTime: [
-                        `2023-10-15T10:00:00+02:00`,
-                        `2023-10-15T12:00:00+02:00`,
-                        `2023-10-15T15:00:00+02:00`,
-                        `2023-10-15T18:00:00+02:00`,
+                        `2023-10-14T14:00:00Z`,
+                        `2023-10-15T12:00:00Z`,
+                        `2023-10-15T15:00:00Z`,
+                        `2023-10-15T18:00:00Z`,
                     ],
                 };
             });

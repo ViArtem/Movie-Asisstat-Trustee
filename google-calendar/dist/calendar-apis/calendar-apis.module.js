@@ -10,6 +10,7 @@ exports.CalendarApisModule = void 0;
 const common_1 = require("@nestjs/common");
 const calendar_apis_controller_1 = require("./calendar-apis.controller");
 const calendar_apis_service_1 = require("./calendar-apis.service");
+const users_module_1 = require("../users/users.module");
 let CalendarApisModule = class CalendarApisModule {
 };
 exports.CalendarApisModule = CalendarApisModule;
@@ -17,6 +18,8 @@ exports.CalendarApisModule = CalendarApisModule = __decorate([
     (0, common_1.Module)({
         controllers: [calendar_apis_controller_1.CalendarApisController],
         providers: [calendar_apis_service_1.CalendarApisService],
+        imports: [(0, common_1.forwardRef)(() => users_module_1.UsersModule)],
+        exports: [calendar_apis_service_1.CalendarApisService],
     })
 ], CalendarApisModule);
 //# sourceMappingURL=calendar-apis.module.js.map

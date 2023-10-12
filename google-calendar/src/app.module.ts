@@ -6,6 +6,7 @@ import { GoogleAuthModule } from "./google-auth/google-auth.module";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { User } from "./users/users.model";
 import { UsersModule } from "./users/users.module";
+import { MovieScheduleModule } from './movie-schedule/movie-schedule.module';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { UsersModule } from "./users/users.module";
     }),
 
     UsersModule,
+
+    MovieScheduleModule,
   ],
   controllers: [],
   providers: [],

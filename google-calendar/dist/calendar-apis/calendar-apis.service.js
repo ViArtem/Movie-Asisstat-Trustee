@@ -12,8 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CalendarApisService = void 0;
 const common_1 = require("@nestjs/common");
 const googleapis_1 = require("googleapis");
+const users_service_1 = require("../users/users.service");
 let CalendarApisService = class CalendarApisService {
-    constructor() {
+    constructor(userService) {
+        this.userService = userService;
         this.auth = new googleapis_1.google.auth.OAuth2({
             clientId: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -31,11 +33,11 @@ let CalendarApisService = class CalendarApisService {
                 summary: "Demo",
                 description: "Тест для демонстрацїї",
                 start: {
-                    dateTime: "2023-10-20T16:00:00+02:00",
+                    dateTime: "2023-10-20T16:00:00",
                     timeZone: "Europe/Kyiv",
                 },
                 end: {
-                    dateTime: "2023-10-20T18:00:00+02:00",
+                    dateTime: "2023-10-20T18:00:00",
                     timeZone: "Europe/Kyiv",
                 },
             };
@@ -50,21 +52,30 @@ let CalendarApisService = class CalendarApisService {
             throw new common_1.HttpException(error.message, error.status || 500);
         }
     }
-    async getFreeSlots(access) {
+    async getEventsTime(access) {
         try {
+            const user = await this.userService.getUserByAccessToken(access);
             this.auth.setCredentials({
                 access_token: access,
-                refresh_token: "",
+                refresh_token: user.refresh,
             });
             this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
-            const yourEvents = this.calendar.events.list({
+            const currentTime = new Date();
+            const timeMin = currentTime.toISOString();
+            const timeMax = new Date(currentTime.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+            const userEvents = await this.calendar.events.list({
                 calendarId: "primary",
-                timeMin: new Date().toISOString(),
+                timeMin: timeMin,
+                timeMax: timeMax,
                 maxResults: 10,
                 singleEvents: true,
                 orderBy: "startTime",
+                timeZone: "Etc/UTC",
             });
-            return yourEvents;
+            const eventTime = userEvents.data.items.map((event) => {
+                return { start: event.start.dateTime, end: event.end.dateTime };
+            });
+            return eventTime;
         }
         catch (error) {
             console.error(error);
@@ -75,6 +86,6 @@ let CalendarApisService = class CalendarApisService {
 exports.CalendarApisService = CalendarApisService;
 exports.CalendarApisService = CalendarApisService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], CalendarApisService);
 //# sourceMappingURL=calendar-apis.service.js.map

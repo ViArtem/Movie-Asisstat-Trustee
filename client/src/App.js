@@ -43,8 +43,9 @@ function App() {
 
   async function findPossibleTime(displayTime) {
     try {
-      axios.post(
-        `${process.env.REACT_APP_SERVER_URL}/movie-apis/get/list?authResult=${authResult}`
+      await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/movie-schedule/get/possible-movie-time?authResult=${authResult}`,
+        { displayTime }
       );
     } catch (error) {
       alert(error);
