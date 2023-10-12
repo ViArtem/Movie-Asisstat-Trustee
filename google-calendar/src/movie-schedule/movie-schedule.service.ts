@@ -12,15 +12,38 @@ export class MovieScheduleService {
 
       function checkCondition(item) {
         for (const interval of slotsInCalendar) {
-          if (item >= interval.start && item <= interval.end) {
+          if (
+            (item.start >= interval.start && item.start <= interval.end) ||
+            (item.end >= interval.start && item.end <= interval.end)
+          ) {
             return false;
           }
         }
         return true;
       }
 
-      const result = movieTime.filter(checkCondition);
-      console.log(result);
+      const availableTime = movieTime.filter(checkCondition);
+
+      //-----------------------------------------------------------
+      // Sort the arrays by start time.
+      // slotsInCalendar.sort((a, b) => a.start - b.start);
+      // movieTime.sort((a, b) => a.start - b.start);
+
+      // // Create a hash table to store the slots in the calendar.
+      // const calendarSlots = {};
+      // for (const slot of slotsInCalendar) {
+      //   calendarSlots[slot.start] = true;
+      // }
+
+      // // Filter the movie times to only include those that do not overlap with any calendar events.
+      // const availableTime = movieTime.filter((movie) => {
+      //   if (calendarSlots[movie.startTime] || calendarSlots[movie.end]) {
+      //     return false;
+      //   }
+      //   return true;
+      // });
+
+      return availableTime;
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status || 500);

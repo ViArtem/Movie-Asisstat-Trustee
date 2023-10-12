@@ -1,8 +1,8 @@
 import { CalendarApisService } from "./calendar-apis.service";
-import { UserCredentialsDto } from "./dto/user-credentials.dto";
+import { CreateEventDto } from "./dto/create-event.dto";
 export declare class CalendarApisController {
     private readonly calendarService;
     constructor(calendarService: CalendarApisService);
-    createEvent(userCredentials: UserCredentialsDto): Promise<object>;
+    createEvent(userCredentials: CreateEventDto, authResult: string): Promise<object>;
     getFreeSlot(): CalendarApisService;
 }

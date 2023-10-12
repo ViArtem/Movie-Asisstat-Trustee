@@ -22,30 +22,30 @@ let CalendarApisService = class CalendarApisService {
             redirectUri: process.env.CLIENT_URL,
         });
     }
-    async createEvents(credential) {
+    async createEvents(eventDto, authResult) {
         try {
-            this.auth.setCredentials({
-                access_token: "",
-                refresh_token: "",
-            });
-            this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
             const event = {
-                summary: "Demo",
-                description: "Тест для демонстрацїї",
+                summary: eventDto.title,
+                description: "Сходити у кіно",
                 start: {
-                    dateTime: "2023-10-20T16:00:00",
-                    timeZone: "Europe/Kyiv",
+                    dateTime: eventDto.startTime,
                 },
                 end: {
-                    dateTime: "2023-10-20T18:00:00",
-                    timeZone: "Europe/Kyiv",
+                    dateTime: eventDto.endTime,
                 },
             };
+            const user = await this.userService.getUserByAccessToken(authResult.access);
+            this.auth.setCredentials({
+                access_token: authResult.access,
+                refresh_token: user.refresh,
+            });
+            this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
             const response = await this.calendar.events.insert({
                 calendarId: "primary",
                 requestBody: event,
             });
             return response;
+            return;
         }
         catch (error) {
             console.error(error);

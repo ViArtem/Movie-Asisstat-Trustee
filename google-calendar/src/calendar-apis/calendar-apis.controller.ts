@@ -1,14 +1,20 @@
-import { Controller, Get, Post, Body } from "@nestjs/common";
+import { Controller, Get, Post, Body, Query } from "@nestjs/common";
 import { CalendarApisService } from "./calendar-apis.service";
-import { UserCredentialsDto } from "./dto/user-credentials.dto";
+import { CreateEventDto } from "./dto/create-event.dto";
 
 @Controller("calendar")
 export class CalendarApisController {
   constructor(private readonly calendarService: CalendarApisService) {}
 
-  @Post("create-post")
-  createEvent(@Body() userCredentials: UserCredentialsDto) {
-    return this.calendarService.createEvents(userCredentials.credential);
+  @Post("create-event")
+  createEvent(
+    @Body() userCredentials: CreateEventDto,
+    @Query("authResult") authResult: string
+  ) {
+    return this.calendarService.createEvents(
+      userCredentials,
+      JSON.parse(authResult)
+    );
   }
 
   @Get("get/free-slots")

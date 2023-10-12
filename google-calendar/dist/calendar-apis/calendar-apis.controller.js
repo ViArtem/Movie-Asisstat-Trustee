@@ -15,13 +15,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CalendarApisController = void 0;
 const common_1 = require("@nestjs/common");
 const calendar_apis_service_1 = require("./calendar-apis.service");
-const user_credentials_dto_1 = require("./dto/user-credentials.dto");
+const create_event_dto_1 = require("./dto/create-event.dto");
 let CalendarApisController = class CalendarApisController {
     constructor(calendarService) {
         this.calendarService = calendarService;
     }
-    createEvent(userCredentials) {
-        return this.calendarService.createEvents(userCredentials.credential);
+    createEvent(userCredentials, authResult) {
+        return this.calendarService.createEvents(userCredentials, JSON.parse(authResult));
     }
     getFreeSlot() {
         return this.calendarService;
@@ -29,10 +29,11 @@ let CalendarApisController = class CalendarApisController {
 };
 exports.CalendarApisController = CalendarApisController;
 __decorate([
-    (0, common_1.Post)("create-post"),
+    (0, common_1.Post)("create-event"),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Query)("authResult")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_credentials_dto_1.UserCredentialsDto]),
+    __metadata("design:paramtypes", [create_event_dto_1.CreateEventDto, String]),
     __metadata("design:returntype", void 0)
 ], CalendarApisController.prototype, "createEvent", null);
 __decorate([

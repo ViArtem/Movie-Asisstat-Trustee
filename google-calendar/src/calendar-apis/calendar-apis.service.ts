@@ -1,6 +1,7 @@
 import { Injectable, HttpException } from "@nestjs/common";
 import { google, calendar_v3 } from "googleapis";
 import { UsersService } from "src/users/users.service";
+import { CreateEventDto } from "./dto/create-event.dto";
 
 @Injectable()
 export class CalendarApisService {
@@ -15,32 +16,38 @@ export class CalendarApisService {
   constructor(private userService: UsersService) {}
 
   //
-  async createEvents(credential: string): Promise<object> {
+  async createEvents(eventDto: CreateEventDto, authResult): Promise<object> {
     try {
+      const event = {
+        summary: eventDto.title,
+        description: "Сходити у кіно",
+        start: {
+          dateTime: eventDto.startTime,
+          //timeZone: "Europe/Kyiv",
+        },
+        end: {
+          dateTime: eventDto.endTime,
+          //timeZone: "Europe/Kyiv",
+        },
+      };
+
+      const user = await this.userService.getUserByAccessToken(
+        authResult.access
+      );
+
       this.auth.setCredentials({
-        access_token: "",
-        refresh_token: "",
+        access_token: authResult.access,
+        refresh_token: user.refresh,
       });
 
       this.calendar = google.calendar({ version: "v3", auth: this.auth });
-      const event = {
-        summary: "Demo",
-        description: "Тест для демонстрацїї",
-        start: {
-          dateTime: "2023-10-20T16:00:00",
-          timeZone: "Europe/Kyiv",
-        },
-        end: {
-          dateTime: "2023-10-20T18:00:00",
-          timeZone: "Europe/Kyiv",
-        },
-      };
 
       const response = await this.calendar.events.insert({
         calendarId: "primary",
         requestBody: event,
       });
       return response;
+      return;
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status || 500);
