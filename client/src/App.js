@@ -1,46 +1,83 @@
-import React from "react";
-import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const googleResponse = async (credentialResponse) => {
+  const [movieList, setMovieList] = useState([]);
+  const [isAuth, setIsAuth] = useState(false);
+  const [authResult, setAuthResult] = useState("");
+
+  useEffect(() => {
     try {
-      console.log(credentialResponse);
-      // const { credential } = credentialResponse;
+      const urlParams = new URLSearchParams(window.location.search);
+      const params = urlParams.get("authResult");
 
-      // const serverResponce = await axios.post(
-      //   `${process.env.REACT_APP_SERVER_URL}calendar/create-tokens`,
-      //   { credential }
-      // );
+      if (params) {
+        const result = JSON.parse(params);
+        localStorage.setItem("token", result.access);
 
-      // console.log(serverResponce);
+        (async function getResult() {
+          try {
+            const movieListResult = await axios.get(
+              `${process.env.REACT_APP_SERVER_URL}/movie-apis/get/list`
+            );
+
+            setMovieList(movieListResult.data); // Оновлюємо стан
+
+            setIsAuth(true);
+            setAuthResult(params);
+          } catch (error) {
+            console.error("Помилка при завантаженні списку фільмів:", error);
+          }
+        })();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  async function getListFreeDaysFromGoogleCalendar() {
+    await axios.get(
+      `${process.env.REACT_APP_SERVER_URL}/movie-apis/get/list?authResult=${authResult}`
+    );
+  }
+
+  async function findPossibleTime(displayTime) {
+    try {
+      axios.post(
+        `${process.env.REACT_APP_SERVER_URL}/movie-apis/get/list?authResult=${authResult}`
+      );
     } catch (error) {
       alert(error);
     }
-  };
+  }
 
   return (
     <div className="App">
       <h1>Movie planner</h1>
-      <div>
-        <GoogleOAuthProvider
-          clientId=""
-          cookiePolicy="single_host_origin"
-          scope="openid email profile https://www.googleapis.com/auth/calendar"
-          uxMode="popup"
-          state_cookie_domain="http://localhost:3000/"
-          responseType="code"
-          accessType="offline"
+      {!isAuth ? (
+        <form
+          action={`${process.env.REACT_APP_SERVER_URL}/google`}
+          method="get"
         >
-          <GoogleLogin
-            onSuccess={googleResponse}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-            useOneTap
-          />
-        </GoogleOAuthProvider>
+          <input type="submit" value="Press to log in" />
+        </form>
+      ) : (
+        ""
+      )}
+
+      <div>
+        {movieList.length ? (
+          movieList.map((movie) => (
+            <div key={movie.id}>
+              <p>{movie.title}</p>
+              <div onClick={() => findPossibleTime(movie.displayTime)}>
+                Дізнатись
+              </div>
+            </div>
+          ))
+        ) : (
+          <div>No movies available.</div>
+        )}
       </div>
     </div>
   );

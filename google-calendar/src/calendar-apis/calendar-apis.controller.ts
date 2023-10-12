@@ -10,4 +10,9 @@ export class CalendarApisController {
   createEvent(@Body() userCredentials: UserCredentialsDto) {
     return this.calendarService.createEvents(userCredentials.credential);
   }
+
+  @Get("get/free-slots")
+  getFreeSlot() {
+    return this.calendarService;
+  }
 }

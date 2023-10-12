@@ -20,21 +20,14 @@ let CalendarApisController = class CalendarApisController {
     constructor(calendarService) {
         this.calendarService = calendarService;
     }
-    createTokens(userCredentials) {
-        return this.calendarService.createTokens(userCredentials.credential);
-    }
     createEvent(userCredentials) {
         return this.calendarService.createEvents(userCredentials.credential);
     }
+    getFreeSlot() {
+        return this.calendarService;
+    }
 };
 exports.CalendarApisController = CalendarApisController;
-__decorate([
-    (0, common_1.Post)("create-tokens"),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_credentials_dto_1.UserCredentialsDto]),
-    __metadata("design:returntype", void 0)
-], CalendarApisController.prototype, "createTokens", null);
 __decorate([
     (0, common_1.Post)("create-post"),
     __param(0, (0, common_1.Body)()),
@@ -42,6 +35,12 @@ __decorate([
     __metadata("design:paramtypes", [user_credentials_dto_1.UserCredentialsDto]),
     __metadata("design:returntype", void 0)
 ], CalendarApisController.prototype, "createEvent", null);
+__decorate([
+    (0, common_1.Get)("get/free-slots"),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], CalendarApisController.prototype, "getFreeSlot", null);
 exports.CalendarApisController = CalendarApisController = __decorate([
     (0, common_1.Controller)("calendar"),
     __metadata("design:paramtypes", [calendar_apis_service_1.CalendarApisService])

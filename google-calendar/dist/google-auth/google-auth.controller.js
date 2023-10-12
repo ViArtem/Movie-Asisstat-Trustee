@@ -21,11 +21,11 @@ let GoogleAuthController = class GoogleAuthController {
         this.authService = authService;
     }
     async googleAuth(req) {
-        console.log("Heloo");
         return "Hello";
     }
-    googleAuthRedirect(req) {
-        return this.authService.googleLogin(req);
+    async googleAuthRedirect(req, res) {
+        const result = await this.authService.googleLogin(req);
+        return res.redirect(`${process.env.CLIENT_URL}?authResult=${JSON.stringify(result)}`);
     }
 };
 exports.GoogleAuthController = GoogleAuthController;
@@ -41,9 +41,10 @@ __decorate([
     (0, common_1.Get)("redirect"),
     (0, common_1.UseGuards)((0, passport_1.AuthGuard)("google")),
     __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Res)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
 ], GoogleAuthController.prototype, "googleAuthRedirect", null);
 exports.GoogleAuthController = GoogleAuthController = __decorate([
     (0, common_1.Controller)("google"),

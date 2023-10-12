@@ -1,3 +1,4 @@
 export declare class MovieApisService {
-    getMoviesList(): Promise<void>;
+    private readonly movieApiUrl;
+    getAvailableMoviesList(): Promise<any>;
 }

@@ -1,20 +1,40 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Inject, HttpException } from "@nestjs/common";
+
+import { UserInterface } from "src/interfaces/0Auth-user.interface";
+import { UsersService } from "src/users/users.service";
+
+export interface LoginInterface {
+  access?: string;
+  message?: string;
+}
 
 @Injectable()
 export class GoogleAuthService {
-  constructor() {}
+  constructor(private userService: UsersService) {}
 
-  googleLogin(userData) {
-    if (!userData.user) {
-      return "No user from google";
+  async googleLogin(userData): Promise<LoginInterface> {
+    // TODO: додати типи та інтерфейси
+    try {
+      if (!userData.user) {
+        return { message: "No user from google" };
+      }
+
+      const candidate = await this.userService.getUserByEmail(
+        userData.user.email
+      );
+
+      if (candidate) {
+        await this.userService.updateUserTokens(userData.user);
+      } else {
+        await this.userService.createNewUser(userData.user);
+      }
+
+      return {
+        access: userData.user.accessToken,
+      };
+    } catch (error) {
+      console.error(error);
+      throw new HttpException(error.message, error.status || 500);
     }
-    // зберегти користувача в базі його рефреш ім'я та пошту
-    // виклиикати api на отримання списку фільмів або перенаправити на цей роутер
-    console.log(userData);
-
-    return {
-      message: "User information from google",
-      user: userData.user,
-    };
   }
 }

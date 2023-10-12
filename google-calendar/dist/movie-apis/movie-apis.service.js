@@ -8,22 +8,43 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovieApisService = void 0;
 const common_1 = require("@nestjs/common");
+const node_fetch_1 = require("node-fetch");
 let MovieApisService = class MovieApisService {
-    async getMoviesList() {
+    constructor() {
+        this.movieApiUrl = "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
+    }
+    async getAvailableMoviesList() {
         try {
-            const url = "https://api.themoviedb.org/3/authentication";
             const options = {
                 method: "GET",
-                headers: { accept: "application/json" },
+                headers: {
+                    accept: "application/json",
+                    Authorization: `Bearer ${process.env.MOVIE_API_BEARER}`,
+                },
             };
-            fetch(url, options)
-                .then((res) => res.json())
-                .then((json) => console.log(json))
-                .catch((err) => console.error("error:" + err));
+            const movieData = await (0, node_fetch_1.default)(this.movieApiUrl, options);
+            if (!movieData.ok) {
+                throw new common_1.HttpException("Failed to fetch movies", movieData.status);
+            }
+            const movieDataJson = await movieData.json();
+            const movieList = movieDataJson.results.map((movieData) => {
+                return {
+                    id: movieData.id,
+                    title: movieData.original_title,
+                    release_date: movieData.release_date,
+                    displayTime: [
+                        `2023-10-15T10:00:00+02:00`,
+                        `2023-10-15T12:00:00+02:00`,
+                        `2023-10-15T15:00:00+02:00`,
+                        `2023-10-15T18:00:00+02:00`,
+                    ],
+                };
+            });
+            return movieList;
         }
         catch (error) {
-            console.log(error);
-            throw new common_1.HttpException(error.message, error.status);
+            console.error(error);
+            throw new common_1.HttpException(error.message, error.status || 500);
         }
     }
 };

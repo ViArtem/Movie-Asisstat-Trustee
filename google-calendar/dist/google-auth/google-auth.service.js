@@ -11,22 +11,36 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GoogleAuthService = void 0;
 const common_1 = require("@nestjs/common");
+const users_service_1 = require("../users/users.service");
 let GoogleAuthService = class GoogleAuthService {
-    constructor() { }
-    googleLogin(userData) {
-        if (!userData.user) {
-            return "No user from google";
+    constructor(userService) {
+        this.userService = userService;
+    }
+    async googleLogin(userData) {
+        try {
+            if (!userData.user) {
+                return { message: "No user from google" };
+            }
+            const candidate = await this.userService.getUserByEmail(userData.user.email);
+            if (candidate) {
+                await this.userService.updateUserTokens(userData.user);
+            }
+            else {
+                await this.userService.createNewUser(userData.user);
+            }
+            return {
+                access: userData.user.accessToken,
+            };
         }
-        console.log(userData);
-        return {
-            message: "User information from google",
-            user: userData.user,
-        };
+        catch (error) {
+            console.error(error);
+            throw new common_1.HttpException(error.message, error.status || 500);
+        }
     }
 };
 exports.GoogleAuthService = GoogleAuthService;
 exports.GoogleAuthService = GoogleAuthService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [users_service_1.UsersService])
 ], GoogleAuthService);
 //# sourceMappingURL=google-auth.service.js.map

@@ -20,11 +20,11 @@ let CalendarApisService = class CalendarApisService {
             redirectUri: process.env.CLIENT_URL,
         });
     }
-    async createTokens(credential) {
+    async createEvents(credential) {
         try {
             this.auth.setCredentials({
-                access_token: "ya29.a0AfB_byBEkD_vWnNm5i6c6myzeYdA_ynWULqQYxD5pRU1Jjceqtge0Vg-uwzdANpmTb_BUOVyrsX1-9kN2tktvOJyPa4IqxE7W_EsoIH14nqcgJRXxh2J0Em0AdtE6vWPsCQqaM2KSCQUUEOFnM4xH_mKX2OUFT9G24NnaCgYKAVISARMSFQGOcNnCF-ODWvwVvWGuDWQTO3eQZQ0171",
-                refresh_token: "1//09HfEqoHiyj_QCgYIARAAGAkSNwF-L9IrumCICnBeQtbD051jPClwsTPXgj9QbY1JGte342k1IaQalrvIvwh2rgoxZ1Mf4_T_fog",
+                access_token: "",
+                refresh_token: "",
             });
             this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
             const event = {
@@ -46,33 +46,29 @@ let CalendarApisService = class CalendarApisService {
             return response;
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
+            throw new common_1.HttpException(error.message, error.status || 500);
         }
     }
-    async createEvents(credential) {
+    async getFreeSlots(access) {
         try {
-            const event = {
-                summary: "Demo",
-                description: "Тест для демонстрацїї",
-                start: {
-                    dateTime: "2023-10-20T16:00:00+02:00",
-                    timeZone: "Europe/Kyiv",
-                },
-                end: {
-                    dateTime: "2023-10-20T18:00:00+02:00",
-                    timeZone: "Europe/Kyiv",
-                },
-            };
-            let calendar = googleapis_1.google.calendar("v3");
-            const response = await calendar.events.insert({
-                auth: this.auth,
-                calendarId: "primary",
-                requestBody: event,
+            this.auth.setCredentials({
+                access_token: access,
+                refresh_token: "",
             });
-            return response;
+            this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
+            const yourEvents = this.calendar.events.list({
+                calendarId: "primary",
+                timeMin: new Date().toISOString(),
+                maxResults: 10,
+                singleEvents: true,
+                orderBy: "startTime",
+            });
+            return yourEvents;
         }
         catch (error) {
-            console.log(error);
+            console.error(error);
+            throw new common_1.HttpException(error.message, error.status || 500);
         }
     }
 };

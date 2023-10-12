@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const google_auth_service_1 = require("./google-auth.service");
 const google_auth_controller_1 = require("./google-auth.controller");
 const google_strategy_1 = require("./google.strategy");
+const users_module_1 = require("../users/users.module");
 let GoogleAuthModule = class GoogleAuthModule {
 };
 exports.GoogleAuthModule = GoogleAuthModule;
@@ -18,6 +19,8 @@ exports.GoogleAuthModule = GoogleAuthModule = __decorate([
     (0, common_1.Module)({
         providers: [google_auth_service_1.GoogleAuthService, google_strategy_1.GoogleStrategy],
         controllers: [google_auth_controller_1.GoogleAuthController],
+        imports: [(0, common_1.forwardRef)(() => users_module_1.UsersModule)],
+        exports: [google_auth_service_1.GoogleAuthService],
     })
 ], GoogleAuthModule);
 //# sourceMappingURL=google-auth.module.js.map
