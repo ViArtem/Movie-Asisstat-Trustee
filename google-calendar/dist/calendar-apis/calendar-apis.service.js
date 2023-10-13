@@ -78,10 +78,12 @@ let CalendarApisService = class CalendarApisService {
                 orderBy: "startTime",
                 timeZone: "Etc/UTC",
             });
-            const eventTime = userEvents.data.items.map((event) => {
-                return { start: event.start.dateTime, end: event.end.dateTime };
-            });
-            return eventTime;
+            if (userEvents.data.items.length) {
+                return userEvents.data.items.map((event) => {
+                    return { start: event.start.dateTime, end: event.end.dateTime };
+                });
+            }
+            return [];
         }
         catch (error) {
             console.error(error);

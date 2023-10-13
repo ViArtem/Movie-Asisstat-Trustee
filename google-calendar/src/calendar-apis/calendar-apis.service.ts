@@ -70,7 +70,7 @@ export class CalendarApisService {
   }
 
   //
-  async getEventsTime(access: string): Promise<EventTimeInterface[]> {
+  async getEventsTime(access: string): Promise<EventTimeInterface[] | []> {
     try {
       const user = await this.userService.getUserByAccessToken(access);
 
@@ -93,11 +93,13 @@ export class CalendarApisService {
         timeZone: "Etc/UTC",
       });
 
-      const eventTime = userEvents.data.items.map((event) => {
-        return { start: event.start.dateTime, end: event.end.dateTime };
-      });
+      if (userEvents.data.items.length) {
+        return userEvents.data.items.map((event) => {
+          return { start: event.start.dateTime, end: event.end.dateTime };
+        });
+      }
 
-      return eventTime;
+      return [];
     } catch (error) {
       console.error(error);
       throw new HttpException(error.message, error.status || 500);

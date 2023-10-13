@@ -10,5 +10,5 @@ export declare class CalendarApisService {
     private initGoogleCalendar;
     private setCalendarCredentials;
     createEvents(eventDto: CreateEventDto, access: string): Promise<EventStatus>;
-    getEventsTime(access: string): Promise<EventTimeInterface[]>;
+    getEventsTime(access: string): Promise<EventTimeInterface[] | []>;
 }
