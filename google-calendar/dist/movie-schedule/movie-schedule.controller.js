@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MovieScheduleController = void 0;
 const common_1 = require("@nestjs/common");
 const movie_schedule_service_1 = require("./movie-schedule.service");
+const movie_time_dto_1 = require("./dto/movie-time.dto");
 let MovieScheduleController = class MovieScheduleController {
     constructor(movieScheduleService) {
         this.movieScheduleService = movieScheduleService;
@@ -29,7 +30,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Query)("authResult")),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:paramtypes", [movie_time_dto_1.UserTimeDto, String]),
     __metadata("design:returntype", void 0)
 ], MovieScheduleController.prototype, "getPossibleMovieTime", null);
 exports.MovieScheduleController = MovieScheduleController = __decorate([

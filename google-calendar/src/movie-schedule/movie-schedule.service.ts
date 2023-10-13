@@ -14,11 +14,11 @@ export class MovieScheduleService {
       const slotsInCalendar =
         await this.calendarService.getEventsTime(accessToken);
 
-      function checkCondition(item) {
+      function checkCondition(time) {
         for (const interval of slotsInCalendar) {
           if (
-            (item.start >= interval.start && item.start <= interval.end) ||
-            (item.end >= interval.start && item.end <= interval.end)
+            (time.start >= interval.start && time.start <= interval.end) ||
+            (time.end >= interval.start && time.end <= interval.end)
           ) {
             return false;
           }
