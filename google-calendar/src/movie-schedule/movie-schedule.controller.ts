@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Query } from "@nestjs/common";
+import { Body, Controller, Post, Query, UsePipes } from "@nestjs/common";
 import { MovieScheduleService } from "./movie-schedule.service";
 import { UserTimeDto } from "./dto/movie-time.dto";
 

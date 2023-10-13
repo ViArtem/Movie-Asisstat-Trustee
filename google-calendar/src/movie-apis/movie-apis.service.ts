@@ -8,7 +8,7 @@ export class MovieApisService {
     "https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1";
 
   private randomArrayNumber(array: Array<any>) {
-    return Math.floor(Math.random() * (array.length - 0 + 1)) + 0;
+    return Math.floor(Math.random() * array.length) + 0;
   }
 
   async getAvailableMoviesList(): Promise<MovieDataInterface> {

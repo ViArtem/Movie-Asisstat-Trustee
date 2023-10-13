@@ -18,9 +18,6 @@ function App() {
       const params = urlParams.get("authResult");
 
       if (params) {
-        const result = JSON.parse(params);
-        localStorage.setItem("token", result.access);
-
         (async function getResult() {
           try {
             const movieListResult = await axios.get(
@@ -48,7 +45,6 @@ function App() {
         { displayTime }
       );
 
-      console.log(availableTime.data);
       setFilmTitle(title);
       setFilmTime(availableTime.data);
       setAboutFilm(true);
@@ -59,7 +55,7 @@ function App() {
 
   async function saveEventToCalendar(title, startTime, endTime) {
     try {
-      const saveEvent = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_SERVER_URL}/calendar/create-event?authResult=${authResult}`,
         { title, startTime, endTime }
       );
@@ -110,22 +106,26 @@ function App() {
           <h3 className="filmListBlockSubtitle">
             Можливий час перегляду фільму врахувуючи ваш графік
           </h3>
-          {filmTime.map((time) => {
-            return (
-              <div className="movieDetail">
-                <p className="movieDetailPar">Початок: {time.start}</p>
-                <p className="movieDetailPar">Кінець: {time.end}</p>
-                <div
-                  className="movieDetailButton"
-                  onClick={() => {
-                    saveEventToCalendar(filmTitle, time.start, time.end);
-                  }}
-                >
-                  Заберегти в календар
+          {filmTime.length ? (
+            filmTime.map((time) => {
+              return (
+                <div className="movieDetail" key={`${time.start}-${time.end}`}>
+                  <p className="movieDetailPar">Початок: {time.start}</p>
+                  <p className="movieDetailPar">Кінець: {time.end}</p>
+                  <div
+                    className="movieDetailButton"
+                    onClick={() => {
+                      saveEventToCalendar(filmTitle, time.start, time.end);
+                    }}
+                  >
+                    Заберегти в календар
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <p className="noMovie">Немає доступних сеансів</p>
+          )}
         </div>
       )}
     </div>
