@@ -9,6 +9,7 @@ export declare class CalendarApisService {
     constructor(userService: UsersService);
     private initGoogleCalendar;
     private setCalendarCredentials;
+    private searchPeriodForCalendarEvents;
     createEvents(eventDto: CreateEventDto, access: string): Promise<EventStatus>;
     getEventsTime(access: string): Promise<EventTimeInterface[] | []>;
 }

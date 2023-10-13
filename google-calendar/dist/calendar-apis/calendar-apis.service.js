@@ -35,6 +35,12 @@ let CalendarApisService = class CalendarApisService {
             await this.initGoogleCalendar();
         }
     }
+    searchPeriodForCalendarEvents() {
+        const currentTime = new Date();
+        const timeMin = currentTime.toISOString();
+        const timeMax = new Date(currentTime.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString();
+        return { timeMin, timeMax };
+    }
     async createEvents(eventDto, access) {
         try {
             const event = {
@@ -66,13 +72,11 @@ let CalendarApisService = class CalendarApisService {
         try {
             const user = await this.userService.getUserByAccessToken(access);
             await this.setCalendarCredentials(access, user.refresh);
-            const currentTime = new Date();
-            const timeMin = currentTime.toISOString();
-            const timeMax = new Date(currentTime.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString();
+            const times = this.searchPeriodForCalendarEvents();
             const userEvents = await this.calendar.events.list({
                 calendarId: "primary",
-                timeMin: timeMin,
-                timeMax: timeMax,
+                timeMin: times.timeMin,
+                timeMax: times.timeMax,
                 maxResults: 10,
                 singleEvents: true,
                 orderBy: "startTime",

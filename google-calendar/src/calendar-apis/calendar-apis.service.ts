@@ -4,6 +4,7 @@ import { UsersService } from "src/users/users.service";
 import { CreateEventDto } from "./dto/create-event.dto";
 import { EventStatus } from "../interfaces/status.interface";
 import { EventTimeInterface } from "../interfaces/seance-time.interface";
+import { PeriodForCalendarEventsInterface } from "src/interfaces/period-for-calendar-events.interface";
 
 @Injectable()
 export class CalendarApisService {
@@ -32,6 +33,18 @@ export class CalendarApisService {
     if (!this.calendar) {
       await this.initGoogleCalendar();
     }
+  }
+
+  private searchPeriodForCalendarEvents(): PeriodForCalendarEventsInterface {
+    const currentTime = new Date();
+
+    const timeMin = currentTime.toISOString();
+
+    const timeMax = new Date(
+      currentTime.getTime() + 28 * 24 * 60 * 60 * 1000
+    ).toISOString();
+
+    return { timeMin, timeMax };
   }
 
   //
@@ -76,17 +89,12 @@ export class CalendarApisService {
 
       await this.setCalendarCredentials(access, user.refresh);
 
-      const currentTime = new Date();
-      const timeMin = currentTime.toISOString();
-
-      const timeMax = new Date(
-        currentTime.getTime() + 28 * 24 * 60 * 60 * 1000
-      ).toISOString();
+      const times = this.searchPeriodForCalendarEvents();
 
       const userEvents = await this.calendar.events.list({
         calendarId: "primary",
-        timeMin: timeMin,
-        timeMax: timeMax,
+        timeMin: times.timeMin,
+        timeMax: times.timeMax,
         maxResults: 10,
         singleEvents: true,
         orderBy: "startTime",
