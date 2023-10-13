@@ -1,4 +1,4 @@
-import { IsDefined, IsOptional, IsString, Matches } from "class-validator";
+import { IsDefined, IsString, Matches } from "class-validator";
 
 export class CreateEventDto {
   @IsString({ message: "Value title must be a string" })
