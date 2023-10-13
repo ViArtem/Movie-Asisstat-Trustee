@@ -108,7 +108,7 @@ function App() {
         <div className="filmListBlock">
           <h2 className="filmListBlockHEad">{filmTitle}</h2>
           <h3 className="filmListBlockSubtitle">
-            Час перегляду фільмів врахувуючи ваш графік
+            Можливий час перегляду фільму врахувуючи ваш графік
           </h3>
           {filmTime.map((time) => {
             return (

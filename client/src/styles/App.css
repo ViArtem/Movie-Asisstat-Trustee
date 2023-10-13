@@ -36,9 +36,8 @@
 
 .filmListBlock{
 
-    width: 420px;
+    width: 440px;
     height: 550px;
-
     border: solid 2px #ffffff;
     background-color: #bae8e8;
     border-radius: 12px;
@@ -66,6 +65,7 @@
     background-color: transparent;
     font-size: 20px;
     color: #0d1411;
+    margin-top: 10px;
 }
 .movieListElmPar{
     background-color: transparent;
@@ -130,5 +130,5 @@
     background-color: transparent;
     font-size: 18px;
     color: #0d1411;
-    margin-top: 5px;
+    margin-top: 10px;
 }
