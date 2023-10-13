@@ -1,10 +1,7 @@
 import { UsersService } from "src/users/users.service";
-export interface LoginInterface {
-    access?: string;
-    message?: string;
-}
+import { EventStatus } from "src/interfaces/status.interface";
 export declare class GoogleAuthService {
     private userService;
     constructor(userService: UsersService);
-    googleLogin(userData: any): Promise<LoginInterface>;
+    googleLogin(userData: any): Promise<EventStatus>;
 }

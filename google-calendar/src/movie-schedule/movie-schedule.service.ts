@@ -1,11 +1,15 @@
 import { HttpException, Injectable } from "@nestjs/common";
 import { CalendarApisService } from "src/calendar-apis/calendar-apis.service";
+import { EventTimeInterface } from "src/interfaces/seance-time.interface";
 
 @Injectable()
 export class MovieScheduleService {
   constructor(private readonly calendarService: CalendarApisService) {}
 
-  async getPossibleMovieTime(movieTime: Array<string>, accessToken: string) {
+  async getPossibleMovieTime(
+    movieTime: EventTimeInterface[],
+    accessToken: string
+  ): Promise<EventTimeInterface[]> {
     try {
       const slotsInCalendar =
         await this.calendarService.getEventsTime(accessToken);
@@ -23,25 +27,6 @@ export class MovieScheduleService {
       }
 
       const availableTime = movieTime.filter(checkCondition);
-
-      //-----------------------------------------------------------
-      // Sort the arrays by start time.
-      // slotsInCalendar.sort((a, b) => a.start - b.start);
-      // movieTime.sort((a, b) => a.start - b.start);
-
-      // // Create a hash table to store the slots in the calendar.
-      // const calendarSlots = {};
-      // for (const slot of slotsInCalendar) {
-      //   calendarSlots[slot.start] = true;
-      // }
-
-      // // Filter the movie times to only include those that do not overlap with any calendar events.
-      // const availableTime = movieTime.filter((movie) => {
-      //   if (calendarSlots[movie.startTime] || calendarSlots[movie.end]) {
-      //     return false;
-      //   }
-      //   return true;
-      // });
 
       return availableTime;
     } catch (error) {

@@ -1,4 +1,6 @@
+import { MovieDataInterface } from "src/interfaces/movie-data.interface";
 export declare class MovieApisService {
     private readonly movieApiUrl;
-    getAvailableMoviesList(): Promise<any>;
+    private randomArrayNumber;
+    getAvailableMoviesList(): Promise<MovieDataInterface>;
 }

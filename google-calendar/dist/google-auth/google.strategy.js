@@ -34,7 +34,7 @@ let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrateg
             access_type: "offline",
         };
     }
-    async validate(accessToken, refreshToken, profile, done) {
+    async validate(accessToken, refreshToken, profile) {
         const { name, emails } = profile;
         const user = {
             email: emails[0].value,
@@ -42,7 +42,7 @@ let GoogleStrategy = class GoogleStrategy extends (0, passport_1.PassportStrateg
             accessToken,
             refreshToken,
         };
-        done(null, user);
+        return user;
     }
 };
 exports.GoogleStrategy = GoogleStrategy;

@@ -8,7 +8,7 @@ export class UsersService {
   constructor(@Inject("USER_REPOSITORY") private userRepository: typeof User) {}
 
   //
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
         where: {
@@ -24,7 +24,7 @@ export class UsersService {
   }
 
   //
-  async getUserByAccessToken(token: string) {
+  async getUserByAccessToken(token: string): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
         where: {
@@ -40,7 +40,7 @@ export class UsersService {
   }
 
   //
-  async createNewUser(userData: UserInterface) {
+  async createNewUser(userData: UserInterface): Promise<User> {
     try {
       const user = await this.userRepository.create({
         email: userData.email,

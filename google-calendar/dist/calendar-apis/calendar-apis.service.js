@@ -21,31 +21,41 @@ let CalendarApisService = class CalendarApisService {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             redirectUri: process.env.CLIENT_URL,
         });
+        this.initGoogleCalendar();
     }
-    async createEvents(eventDto, authResult) {
+    async initGoogleCalendar() {
+        this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
+    }
+    async setCalendarCredentials(access, refresh) {
+        this.auth.setCredentials({
+            access_token: access,
+            refresh_token: refresh,
+        });
+        if (!this.calendar) {
+            await this.initGoogleCalendar();
+        }
+    }
+    async createEvents(eventDto, access) {
         try {
             const event = {
                 summary: eventDto.title,
                 description: "Сходити у кіно",
                 start: {
                     dateTime: eventDto.startTime,
+                    timeZone: "Europe/Kyiv",
                 },
                 end: {
                     dateTime: eventDto.endTime,
+                    timeZone: "Europe/Kyiv",
                 },
             };
-            const user = await this.userService.getUserByAccessToken(authResult.access);
-            this.auth.setCredentials({
-                access_token: authResult.access,
-                refresh_token: user.refresh,
-            });
-            this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
-            const response = await this.calendar.events.insert({
+            const user = await this.userService.getUserByAccessToken(access);
+            await this.setCalendarCredentials(access, user.refresh);
+            await this.calendar.events.insert({
                 calendarId: "primary",
                 requestBody: event,
             });
-            return response;
-            return;
+            return { success: "Event created" };
         }
         catch (error) {
             console.error(error);
@@ -55,14 +65,10 @@ let CalendarApisService = class CalendarApisService {
     async getEventsTime(access) {
         try {
             const user = await this.userService.getUserByAccessToken(access);
-            this.auth.setCredentials({
-                access_token: access,
-                refresh_token: user.refresh,
-            });
-            this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
+            await this.setCalendarCredentials(access, user.refresh);
             const currentTime = new Date();
             const timeMin = currentTime.toISOString();
-            const timeMax = new Date(currentTime.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString();
+            const timeMax = new Date(currentTime.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString();
             const userEvents = await this.calendar.events.list({
                 calendarId: "primary",
                 timeMin: timeMin,

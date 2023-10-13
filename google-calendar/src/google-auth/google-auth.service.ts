@@ -1,19 +1,13 @@
-import { Injectable, Inject, HttpException } from "@nestjs/common";
+import { Injectable, HttpException } from "@nestjs/common";
 
-import { UserInterface } from "src/interfaces/0Auth-user.interface";
 import { UsersService } from "src/users/users.service";
-
-export interface LoginInterface {
-  access?: string;
-  message?: string;
-}
+import { EventStatus } from "src/interfaces/status.interface";
 
 @Injectable()
 export class GoogleAuthService {
   constructor(private userService: UsersService) {}
 
-  async googleLogin(userData): Promise<LoginInterface> {
-    // TODO: додати типи та інтерфейси
+  async googleLogin(userData: any): Promise<EventStatus> {
     try {
       if (!userData.user) {
         return { message: "No user from google" };
@@ -23,9 +17,11 @@ export class GoogleAuthService {
         userData.user.email
       );
 
-      if (candidate) {
+      if (candidate && userData.user.refreshToken) {
         await this.userService.updateUserTokens(userData.user);
-      } else {
+      }
+
+      if (!candidate) {
         await this.userService.createNewUser(userData.user);
       }
 

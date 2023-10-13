@@ -22,10 +22,10 @@ let GoogleAuthService = class GoogleAuthService {
                 return { message: "No user from google" };
             }
             const candidate = await this.userService.getUserByEmail(userData.user.email);
-            if (candidate) {
+            if (candidate && userData.user.refreshToken) {
                 await this.userService.updateUserTokens(userData.user);
             }
-            else {
+            if (!candidate) {
                 await this.userService.createNewUser(userData.user);
             }
             return {

@@ -21,10 +21,7 @@ let CalendarApisController = class CalendarApisController {
         this.calendarService = calendarService;
     }
     createEvent(userCredentials, authResult) {
-        return this.calendarService.createEvents(userCredentials, JSON.parse(authResult));
-    }
-    getFreeSlot() {
-        return this.calendarService;
+        return this.calendarService.createEvents(userCredentials, JSON.parse(authResult).access);
     }
 };
 exports.CalendarApisController = CalendarApisController;
@@ -36,12 +33,6 @@ __decorate([
     __metadata("design:paramtypes", [create_event_dto_1.CreateEventDto, String]),
     __metadata("design:returntype", void 0)
 ], CalendarApisController.prototype, "createEvent", null);
-__decorate([
-    (0, common_1.Get)("get/free-slots"),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], CalendarApisController.prototype, "getFreeSlot", null);
 exports.CalendarApisController = CalendarApisController = __decorate([
     (0, common_1.Controller)("calendar"),
     __metadata("design:paramtypes", [calendar_apis_service_1.CalendarApisService])
