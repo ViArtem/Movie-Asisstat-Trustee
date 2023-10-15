@@ -12,25 +12,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserTimeDto = void 0;
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
-class DisplayTimeDto {
-}
-__decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsDefined)(),
-    __metadata("design:type", String)
-], DisplayTimeDto.prototype, "start", void 0);
-__decorate([
-    (0, class_validator_1.IsDate)(),
-    (0, class_validator_1.IsDefined)(),
-    __metadata("design:type", String)
-], DisplayTimeDto.prototype, "end", void 0);
 class UserTimeDto {
 }
 exports.UserTimeDto = UserTimeDto;
 __decorate([
-    (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.ArrayMinSize)(1, { message: "At least one item is required" }),
+    (0, class_validator_1.IsArray)({ message: "displayTime must be an array" }),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_validator_1.ArrayMinSize)(1, { message: "displayTime least one item is required" }),
     (0, class_transformer_1.Type)(() => DisplayTimeDto),
     __metadata("design:type", Array)
 ], UserTimeDto.prototype, "displayTime", void 0);
+class DisplayTimeDto {
+}
+__decorate([
+    (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.Matches)(/^(?!\s*$).+/, {
+        message: "Value start must not consist of only spaces",
+    }),
+    (0, class_validator_1.IsDefined)({ message: "Value start must be defined" }),
+    __metadata("design:type", String)
+], DisplayTimeDto.prototype, "start", void 0);
+__decorate([
+    (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.Matches)(/^(?!\s*$).+/, {
+        message: "Value end must not consist of only spaces",
+    }),
+    (0, class_validator_1.IsDefined)({ message: "Value end must be defined" }),
+    __metadata("design:type", String)
+], DisplayTimeDto.prototype, "end", void 0);
 //# sourceMappingURL=movie-time.dto.js.map

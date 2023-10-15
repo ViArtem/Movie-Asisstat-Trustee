@@ -23,19 +23,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "title", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: "Value title must be a string" }),
+    (0, class_validator_1.IsString)({ message: "Value startTime must be a string" }),
     (0, class_validator_1.Matches)(/^(?!\s*$).+/, {
-        message: "Value title must not consist of only spaces",
+        message: "Value startTime must not consist of only spaces",
     }),
-    (0, class_validator_1.IsDefined)({ message: "Value title must be defined" }),
+    (0, class_validator_1.IsDefined)({ message: "Value startTime must be defined" }),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "startTime", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: "Value title must be a string" }),
+    (0, class_validator_1.IsString)({ message: "Value endTime must be a string" }),
     (0, class_validator_1.Matches)(/^(?!\s*$).+/, {
-        message: "Value title must not consist of only spaces",
+        message: "Value endTime must not consist of only spaces",
     }),
-    (0, class_validator_1.IsDefined)({ message: "Value title must be defined" }),
+    (0, class_validator_1.IsDefined)({ message: "Value endTime must be defined" }),
     __metadata("design:type", String)
 ], CreateEventDto.prototype, "endTime", void 0);
 //# sourceMappingURL=create-event.dto.js.map
