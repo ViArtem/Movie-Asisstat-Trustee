@@ -21,7 +21,7 @@ The application server uses `Node.js` in combination with the `Nest.js` framewor
 
 ### Quick start
 
-###### Add all environment variables
+**Add all environment variables!**
 
 Open the `google-calendar` folder in the terminal and enter the following command:
 
