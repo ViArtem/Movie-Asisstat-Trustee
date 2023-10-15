@@ -16,10 +16,6 @@ export class CalendarApisService {
     redirectUri: process.env.CLIENT_URL,
   });
 
-  constructor(private userService: UsersService) {
-    this.initGoogleCalendar();
-  }
-
   private async initGoogleCalendar() {
     this.calendar = google.calendar({ version: "v3", auth: this.auth });
   }
@@ -35,16 +31,22 @@ export class CalendarApisService {
     }
   }
 
-  private searchPeriodForCalendarEvents(): PeriodForCalendarEventsInterface {
+  private searchPeriodForCalendarEvents(
+    days: number
+  ): PeriodForCalendarEventsInterface {
     const currentTime = new Date();
 
     const timeMin = currentTime.toISOString();
 
     const timeMax = new Date(
-      currentTime.getTime() + 28 * 24 * 60 * 60 * 1000
+      currentTime.getTime() + days * 24 * 60 * 60 * 1000
     ).toISOString();
 
     return { timeMin, timeMax };
+  }
+
+  constructor(private userService: UsersService) {
+    this.initGoogleCalendar();
   }
 
   //
@@ -87,15 +89,23 @@ export class CalendarApisService {
     try {
       const user = await this.userService.getUserByAccessToken(access);
 
+      if (!user) {
+        throw new HttpException(
+          "The user with this access token does not exist",
+          401
+        );
+      }
+
       await this.setCalendarCredentials(access, user.refresh);
 
-      const times = this.searchPeriodForCalendarEvents();
+      // Specify how many days we need to receive events from the calendar
+      const times = this.searchPeriodForCalendarEvents(28);
 
       const userEvents = await this.calendar.events.list({
         calendarId: "primary",
         timeMin: times.timeMin,
         timeMax: times.timeMax,
-        maxResults: 10,
+        maxResults: 100,
         singleEvents: true,
         orderBy: "startTime",
         timeZone: "Etc/UTC",

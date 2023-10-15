@@ -21,7 +21,7 @@ let MovieScheduleController = class MovieScheduleController {
         this.movieScheduleService = movieScheduleService;
     }
     getPossibleMovieTime(movieTime, authResult) {
-        return this.movieScheduleService.getPossibleMovieTime(movieTime.displayTime, JSON.parse(authResult).access);
+        return this.movieScheduleService.getPossibleMovieTime(movieTime.displayTime, authResult ? JSON.parse(authResult).access : "");
     }
 };
 exports.MovieScheduleController = MovieScheduleController;

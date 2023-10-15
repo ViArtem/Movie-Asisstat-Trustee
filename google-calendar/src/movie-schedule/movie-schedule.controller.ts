@@ -13,7 +13,7 @@ export class MovieScheduleController {
   ) {
     return this.movieScheduleService.getPossibleMovieTime(
       movieTime.displayTime,
-      JSON.parse(authResult).access
+      authResult ? JSON.parse(authResult).access : ""
     );
   }
 }

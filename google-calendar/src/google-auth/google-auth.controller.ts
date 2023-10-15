@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Req, Redirect, Res } from "@nestjs/common";
+import { Controller, Get, UseGuards, Req, Res } from "@nestjs/common";
 
 import { AuthGuard } from "@nestjs/passport";
 import { GoogleAuthService } from "./google-auth.service";

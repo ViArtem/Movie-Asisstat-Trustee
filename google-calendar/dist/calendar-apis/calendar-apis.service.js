@@ -14,15 +14,6 @@ const common_1 = require("@nestjs/common");
 const googleapis_1 = require("googleapis");
 const users_service_1 = require("../users/users.service");
 let CalendarApisService = class CalendarApisService {
-    constructor(userService) {
-        this.userService = userService;
-        this.auth = new googleapis_1.google.auth.OAuth2({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            redirectUri: process.env.CLIENT_URL,
-        });
-        this.initGoogleCalendar();
-    }
     async initGoogleCalendar() {
         this.calendar = googleapis_1.google.calendar({ version: "v3", auth: this.auth });
     }
@@ -35,11 +26,20 @@ let CalendarApisService = class CalendarApisService {
             await this.initGoogleCalendar();
         }
     }
-    searchPeriodForCalendarEvents() {
+    searchPeriodForCalendarEvents(days) {
         const currentTime = new Date();
         const timeMin = currentTime.toISOString();
-        const timeMax = new Date(currentTime.getTime() + 28 * 24 * 60 * 60 * 1000).toISOString();
+        const timeMax = new Date(currentTime.getTime() + days * 24 * 60 * 60 * 1000).toISOString();
         return { timeMin, timeMax };
+    }
+    constructor(userService) {
+        this.userService = userService;
+        this.auth = new googleapis_1.google.auth.OAuth2({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            redirectUri: process.env.CLIENT_URL,
+        });
+        this.initGoogleCalendar();
     }
     async createEvents(eventDto, access) {
         try {
@@ -71,13 +71,16 @@ let CalendarApisService = class CalendarApisService {
     async getEventsTime(access) {
         try {
             const user = await this.userService.getUserByAccessToken(access);
+            if (!user) {
+                throw new common_1.HttpException("The user with this access token does not exist", 401);
+            }
             await this.setCalendarCredentials(access, user.refresh);
-            const times = this.searchPeriodForCalendarEvents();
+            const times = this.searchPeriodForCalendarEvents(28);
             const userEvents = await this.calendar.events.list({
                 calendarId: "primary",
                 timeMin: times.timeMin,
                 timeMax: times.timeMax,
-                maxResults: 10,
+                maxResults: 100,
                 singleEvents: true,
                 orderBy: "startTime",
                 timeZone: "Etc/UTC",
